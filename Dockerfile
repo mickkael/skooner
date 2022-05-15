@@ -17,7 +17,7 @@ RUN chown -R node:node /usr/src/app/
 EXPOSE 4654
 
 COPY server/package.json server/package-lock.json ./
-RUN npm i --production
+RUN npm i --production --network-timeout 200000
 
 COPY --from=build-deps /usr/src/app/build /usr/src/app/public
 COPY /server ./
