@@ -1,5 +1,5 @@
 # Stage 1 - the build react app
-FROM node:12.22-alpine as build-deps
+FROM node:12.22.10-alpine as build-deps
 WORKDIR /usr/src/app
 COPY client/package.json client/package-lock.json ./
 RUN npm i
@@ -8,7 +8,7 @@ COPY client/ ./
 RUN npm run build
 
 # Stage 2 - the production environment
-FROM node:12.22-alpine
+FROM node:12.22.10-alpine
 
 RUN apk add --no-cache tini
 ENV NODE_ENV production
@@ -17,7 +17,7 @@ RUN chown -R node:node /usr/src/app/
 EXPOSE 4654
 
 COPY server/package.json server/package-lock.json ./
-RUN npm i --production --network-timeout 200000
+RUN npm i --production
 
 COPY --from=build-deps /usr/src/app/build /usr/src/app/public
 COPY /server ./
